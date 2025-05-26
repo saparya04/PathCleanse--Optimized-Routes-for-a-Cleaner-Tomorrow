@@ -4,6 +4,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
+import attendanceRoutes from './routes/attendance.js';
+import academicScoreRoutes from './routes/academicScoreRoutes.js';
+import flagStudentRoutes from './routes/flagStudentRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -17,7 +20,13 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.log(err));
 
 app.use('/api/auth', authRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/academic-score", academicScoreRoutes);
+app.use("/api/flag-students", flagStudentRoutes);
+
+
 
 app.listen(5000, () => {
     console.log(`Server running on port 5000`);
 });
+

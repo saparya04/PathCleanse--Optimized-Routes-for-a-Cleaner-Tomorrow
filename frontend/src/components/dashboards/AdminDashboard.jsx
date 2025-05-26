@@ -11,7 +11,7 @@ return (
       <br />
       <label>
         <input type="radio" name="adminAction" value="contactParents" />
-        Contact Parents
+        Meet Parents
       </label>
       <br />
       <label>

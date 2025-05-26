@@ -6,7 +6,9 @@ import LoginForm from './components/LoginForm';
 import AdminDashboard from './components/dashboards/AdminDashboard';
 import TeacherDashboard from './components/dashboards/TeacherDashboard';
 import ParentDashboard from './components/dashboards/ParentDashboard';
-
+import AttendancePage from './components/dashboards/AttendancePage';
+import AcademicScorePage from './components/dashboards/AcademicScorePage';
+import FlagStudentsPage from './components/dashboards/FlagStudentsPage';
 function App() {
   return (
     <Router>
@@ -17,6 +19,9 @@ function App() {
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
         <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
         <Route path="/dashboard/parent" element={<ParentDashboard />} />
+        <Route path="/attendance" element={<AttendancePage />} />
+        <Route path="/academic-score" element={<AcademicScorePage />} />
+        <Route path="/flag-students" element={<FlagStudentsPage />} />
       </Routes> 
     </Router>
   );
