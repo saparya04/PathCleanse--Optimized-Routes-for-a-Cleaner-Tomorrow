@@ -15,15 +15,33 @@ export default function SignupForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(`http://localhost:5000/api/auth/signup/${role}`, form);
-    navigate(`/login/${role}`);
+
+    try {
+      const res = await axios.post(`http://localhost:5000/api/auth/signup/${role}`, form);
+
+      alert(`${role} signup successful! Please login.`);
+      navigate(`/login/${role}`);
+
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.error === 'No such student') {
+        alert('No such student');
+        navigate('/signup/parent');  // Redirect back to parent signup page
+      } else {
+        alert(err.response?.data?.error || 'Signup failed');
+      }
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>{role.toUpperCase()} Sign Up</h2>
       {fields[role].map((f) => (
-        <input key={f} placeholder={f} onChange={(e) => setForm({ ...form, [f]: e.target.value })} />
+        <input
+          key={f}
+          placeholder={f}
+          onChange={(e) => setForm({ ...form, [f]: e.target.value })}
+          required
+        />
       ))}
       <button type="submit">Sign Up</button>
     </form>

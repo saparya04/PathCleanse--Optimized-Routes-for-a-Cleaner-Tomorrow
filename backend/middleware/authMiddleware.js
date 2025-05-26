@@ -1,14 +1,49 @@
-import jwt from 'jsonwebtoken';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
-module.exports = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+export default function SignupForm() {
+  const { role } = useParams();
+  const [form, setForm] = useState({});
+  const navigate = useNavigate();
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(403).json({ message: 'Token is not valid' });
-  }
-};
+  const fields = {
+    admin: ['name', 'teacherId', 'password'],
+    teacher: ['name', 'subject', 'teacherId', 'password'],
+    parent: ['name', 'studentId', 'address', 'phone', 'password'],
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(`http://localhost:5000/api/auth/signup/${role}`, form);
+
+      alert(`${role} signup successful! Please login.`);
+      navigate(`/login/${role}`);
+
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.error === 'No such student') {
+        alert('No such student');
+        navigate('/signup/parent');  // Redirect back to parent signup page
+      } else {
+        alert(err.response?.data?.error || 'Signup failed');
+      }
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>{role.toUpperCase()} Sign Up</h2>
+      {fields[role].map((f) => (
+        <input
+          key={f}
+          placeholder={f}
+          onChange={(e) => setForm({ ...form, [f]: e.target.value })}
+          required
+        />
+      ))}
+      <button type="submit">Sign Up</button>
+    </form>
+  );
+}

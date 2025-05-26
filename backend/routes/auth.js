@@ -1,3 +1,4 @@
+// routes/auth.js
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -5,12 +6,14 @@ import dotenv from 'dotenv';
 import Teacher from '../models/Teacher.js';
 import Admin from '../models/Admin.js';
 import Parent from '../models/Parent.js';
+import Student from '../models/Student.js';
 
+dotenv.config();
 const router = express.Router();
 
 const models = { teacher: Teacher, admin: Admin, parent: Parent };
 
-// Signup
+// ✅ Signup Route
 router.post('/signup/:role', async (req, res) => {
   const { role } = req.params;
   const data = req.body;
@@ -18,10 +21,30 @@ router.post('/signup/:role', async (req, res) => {
 
   if (!Model) return res.status(400).json({ error: "Invalid role" });
 
-  const hashedPassword = await bcrypt.hash(data.password, 10);
-  data.password = hashedPassword;
-
+  if (role === 'parent') {
   try {
+    const student = await Student.findOne({ studentId: data.studentId });
+    if (!student) {
+      return res.status(400).json({ error: 'Student ID does not exist' });
+    }
+
+   
+    
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    data.password = hashedPassword;
+
+    const newParent = new Parent(data);
+    await newParent.save();
+    return res.status(201).json({ message: `${role} created` });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
+
+  // Default signup for teacher/admin
+  try {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    data.password = hashedPassword;
     const newUser = new Model(data);
     await newUser.save();
     res.status(201).json({ message: `${role} created` });
@@ -30,21 +53,33 @@ router.post('/signup/:role', async (req, res) => {
   }
 });
 
-// Login
+// ✅ Login Route
 router.post('/login/:role', async (req, res) => {
   const { role } = req.params;
   const { teacherId, studentId, password } = req.body;
-  const Model = models[role];
+  let user;
 
-  const idKey = role === 'parent' ? 'studentId' : 'teacherId';
-  const user = await Model.findOne({ [idKey]: role === 'parent' ? studentId : teacherId });
+  try {
+    if (role === 'parent') {
+      user = await Parent.findOne({ studentId });
+    } else if (role === 'teacher') {
+      user = await Teacher.findOne({ teacherId });
+    } else if (role === 'admin') {
+      user = await Admin.findOne({ teacherId });
+    } else {
+      return res.status(400).json({ error: 'Invalid role' });
+    }
 
-  if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.status(401).json({ error: 'Invalid credentials' });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ error: 'Invalid credentials' });
 
-  const token = jwt.sign({ id: user._id, role }, process.env.JWT_SECRET);
-  res.json({ token, role });
+    const token = jwt.sign({ id: user._id, role }, process.env.JWT_SECRET);
+    res.json({ token, role, studentId: user.studentId || null });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
+
 export default router;

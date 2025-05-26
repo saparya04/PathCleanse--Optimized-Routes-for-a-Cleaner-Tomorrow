@@ -7,5 +7,6 @@ const parentSchema = new mongoose.Schema({
   phone: String,
   password: String,
 });
+
 const Parent = mongoose.model('Parent', parentSchema);
 export default Parent;
