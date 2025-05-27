@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import studentIdMap from "../../utils/studentIdMap";
 
 const StudentDashboard = () => {
   const { studentId } = useParams(); // get /:studentId from route
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
-
+  const actualStudentId = studentIdMap[studentId] || studentId;
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/academic-score/student/${studentId}/dashboard`)
+      .get(`http://localhost:5000/api/academic-score/student/${actualStudentId}/dashboard`)
       .then((res) => setData(res.data))
       .catch((err) => {
         setError(err.response?.data?.message || "Failed to fetch score.");
       });
-  }, [studentId]);
+  }, [actualStudentId]);
 
   if (error) return <div><h2>{error}</h2></div>;
 
