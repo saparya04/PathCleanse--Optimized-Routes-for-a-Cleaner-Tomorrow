@@ -30,16 +30,7 @@ export default function DynamicParentDashboard() {
           View Student Details
         </label>
         <br />
-        <label>
-          <input
-            type="radio"
-            name="parentAction"
-            value="checkFlagsMessages"
-            onChange={handleRadioChange}
-          />
-          Check Flags or Messages
-        </label>
-        <br />
+       
         <label>
           <input
             type="radio"

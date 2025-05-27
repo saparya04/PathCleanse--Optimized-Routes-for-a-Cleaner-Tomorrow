@@ -1,5 +1,6 @@
-
+// models/FlagStudent.js
 import mongoose from "mongoose";
+
 const FlagStudentSchema = new mongoose.Schema({
   date: {
     type: String,
@@ -8,11 +9,12 @@ const FlagStudentSchema = new mongoose.Schema({
   },
   flaggedStudents: [
     {
+      studentId: String, // NEW FIELD
       name: String,
       message: String,
     },
   ],
 });
 
-const FlagStudent = mongoose.model('FlagStudent', FlagStudentSchema);
+const FlagStudent = mongoose.model("FlagStudent", FlagStudentSchema);
 export default FlagStudent;

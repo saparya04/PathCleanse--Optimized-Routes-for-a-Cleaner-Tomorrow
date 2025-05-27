@@ -32,5 +32,39 @@ router.get("/:date", async (req, res) => {
     res.status(500).json({ submitted: false });
   }
 });
+// Get total flag score and comments for a student
+router.get("/student/:studentId/flag-score", async (req, res) => {
+  const { studentId } = req.params;
+
+  try {
+    const records = await FlagStudent.find({
+      "flaggedStudents.studentId": studentId,
+    });
+
+    let riskScore = 0;
+    let comments = [];
+
+    for (let record of records) {
+      const studentFlags = record.flaggedStudents.filter(
+        (s) => s.studentId === studentId
+      );
+
+      riskScore += studentFlags.length * 5;
+      comments.push(...studentFlags.map((s) => ({
+        date: record.date,
+        message: s.message
+      })));
+    }
+
+    res.json({
+      flagRiskScore: riskScore,
+      comments,
+    });
+  } catch (err) {
+    console.error("Error fetching flag risk score:", err);
+    res.status(500).json({ flagRiskScore: 0, comments: [] });
+  }
+});
+
 
 export default router;
