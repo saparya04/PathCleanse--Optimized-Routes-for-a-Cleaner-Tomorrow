@@ -14,10 +14,18 @@ export default function LoginForm() {
       const res = await axios.post(`http://localhost:5000/api/auth/login/${role}`, form);
 
       // ✅ Successful login:
+      
       if (res.data.token) {
+        
         if (role === 'parent') {
           navigate(`/${res.data.studentId}/dashboard`);
-        } else {
+        }else if (role === 'teacher') {
+          console.log("Teacher ID:", res.data.teacher._id);
+        localStorage.setItem("teacherId", res.data.teacher._id);
+        const storedTeacherId = localStorage.getItem("teacherId");
+          console.log("Stored teacherId in localStorage:", storedTeacherId);
+        navigate(`/dashboard/${role}`);
+      } else {
           navigate(`/dashboard/${role}`);
         }
       }
@@ -44,6 +52,7 @@ export default function LoginForm() {
           setForm({ ...form, [role === 'parent' ? 'studentId' : 'teacherId']: e.target.value })
         }
       />
+      
       <input
         type="password"
         placeholder="password"

@@ -35,7 +35,7 @@ export default function FlagStudentsPage() {
   useEffect(() => {
     // Check if already submitted today
     axios
-      .get(`/api/flag-students/${today}`)
+      .get(`http://localhost:5000/api/flag-students/${today}`)
       .then((res) => {
         if (res.data.submitted) {
           setSubmitted(true);
@@ -71,7 +71,7 @@ export default function FlagStudentsPage() {
     }));
 
     try {
-      await axios.post("/api/flag-students", {
+      await axios.post("http://localhost:5000/api/flag-students", {
         date: today,
         flaggedStudents: flaggedData.filter((f) => f.flagged),
       });

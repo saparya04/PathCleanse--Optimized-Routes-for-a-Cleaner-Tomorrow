@@ -1,21 +1,20 @@
-
 import mongoose from "mongoose";
 
-const AcademicScoreSchema = new mongoose.Schema({
-  date: {
-    type: String,
-    required: true,
-    unique: true, // one submission per day
-  },
+const studentScoreSchema = new mongoose.Schema({
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
   dropMarks: Boolean,
   noAssignment: Boolean,
   noParticipation: Boolean,
   normal: Boolean,
-  submittedBy: {
-    type: String, // teacher ID or name if needed
-    required: false,
-  }
+  riskScore: Number, // ✅ Add this line
 });
 
-const AcademicScore = mongoose.model('AcademicScore', AcademicScoreSchema);
+
+const academicScoreSchema = new mongoose.Schema({
+  date: String,
+  scores: [studentScoreSchema],
+  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+});
+
+const AcademicScore = mongoose.model("AcademicScore", academicScoreSchema);
 export default AcademicScore;

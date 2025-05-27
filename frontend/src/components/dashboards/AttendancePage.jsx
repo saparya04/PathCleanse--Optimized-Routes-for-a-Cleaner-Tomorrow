@@ -18,7 +18,7 @@ export default function AttendancePage() {
 
   useEffect(() => {
     // check if already submitted
-    axios.get(`/api/attendance/${today}`)
+    axios.get(`http://localhost:5000/api/attendance/${today}`)
       .then(res => {
         if (res.data.submitted) {
           setSubmittedToday(true);
@@ -37,7 +37,7 @@ export default function AttendancePage() {
     if (!allMarked || submittedToday) return;
 
     try {
-      await axios.post("/api/attendance", {
+      await axios.post("http://localhost:5000/api/attendance", {
         date: today,
         records: attendance
       });

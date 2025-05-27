@@ -10,19 +10,19 @@ export default function TeacherDashboard() {
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
 
-    axios.get(`/api/attendance/${today}`)
+    axios.get(`http://localhost:5000/api/attendance/${today}`)
       .then((res) => {
         if (res.data.submitted) setAttendanceDone(true);
       })
       .catch((err) => console.error("Attendance check error", err));
 
-    axios.get(`/api/academic-score/${today}`)
+    axios.get(`http://localhost:5000/api/academic-score/${today}`)
       .then((res) => {
         if (res.data.submitted) setScoreSubmitted(true);
       })
       .catch((err) => console.error("Academic score check error", err));
 
-      axios.get(`/api/flag-students/${today}`).then(res => {
+      axios.get(`http://localhost:5000/api/flag-students/${today}`).then(res => {
     if (res.data.submitted) setFlagDone(true);
   })
   .catch((err) => console.error("Flag check error", err));
@@ -35,7 +35,7 @@ export default function TeacherDashboard() {
     }else if (selected === "academicScore" && !scoreSubmitted) {
       navigate("/academic-score");
     }else if (selected === "flagStudents") {
-      if(!flagDone) navigate("/flag-students");
+      if(!flagDone) navigate("http://localhost:5173/flag-students");
     }
   };
 

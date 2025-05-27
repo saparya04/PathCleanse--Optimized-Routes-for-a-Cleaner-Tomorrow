@@ -10,6 +10,7 @@ import AttendancePage from './components/dashboards/AttendancePage';
 import AcademicScorePage from './components/dashboards/AcademicScorePage';
 import FlagStudentsPage from './components/dashboards/FlagStudentsPage';
 import DynamicParentDashboard from './components/dashboards/DynamicParentDashboard';
+import StudentDashboard from './components/dashboards/StudentDashboard';
 function App() {
   return (
     <Router>
@@ -23,6 +24,8 @@ function App() {
          <Route path="/:studentId/dashboard" element={<DynamicParentDashboard />} />
         <Route path="/attendance" element={<AttendancePage />} />
         <Route path="/academic-score" element={<AcademicScorePage />} />
+<Route path="/student-dashboard/:studentId" element={<StudentDashboard />} />
+
         <Route path="/flag-students" element={<FlagStudentsPage />} />
       </Routes> 
     </Router>
