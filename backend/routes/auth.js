@@ -87,5 +87,23 @@ router.post('/login/:role', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// Save parent message for a student
+router.post('/message/:studentId', async (req, res) => {
+  const { studentId } = req.params;
+  const { content } = req.body;
+
+  try {
+    const student = await Student.findOne({ studentId });
+    if (!student) return res.status(404).json({ error: 'Student not found' });
+
+    student.messages.push({ sender: 'parent', content });
+    await student.save();
+
+    res.status(200).json({ message: 'Message sent successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 export default router;

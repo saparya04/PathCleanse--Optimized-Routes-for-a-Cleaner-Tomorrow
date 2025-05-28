@@ -8,13 +8,15 @@ export default function DynamicParentDashboard() {
   const [selectedAction, setSelectedAction] = useState('');
 
   const handleRadioChange = (e) => {
-    const action = e.target.value;
-    setSelectedAction(action);
+  const action = e.target.value;
+  setSelectedAction(action);
 
-    if (action === 'viewStudentDetails') {
-      navigate(`/student-dashboard/${studentId}`);
-    }
-  };
+  if (action === 'viewStudentDetails') {
+    navigate(`/student-dashboard/${studentId}`);
+  } else if (action === 'communicateTeachers') {
+    navigate(`/communicate/${studentId}`);
+  }
+};
 
   return (
     <div>
