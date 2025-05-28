@@ -76,8 +76,6 @@ router.get("/check-submission", async (req, res) => {
 
 // Get latest academic riskScore for a student by studentId
 // Get latest academic riskScore for a student by studentId
-
-
 router.get("/student/:studentId/dashboard", async (req, res) => {
   try {
     const { studentId } = req.params;
@@ -94,19 +92,23 @@ router.get("/student/:studentId/dashboard", async (req, res) => {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    // Find latest AcademicScore document (sort descending by date)
-    const latest = await AcademicScore.findOne().sort({ date: -1 }).lean();
+    // Get today's date string in YYYY-MM-DD format
+    const today = new Date().toISOString().slice(0, 10);
+
+    // Try to find AcademicScore document for today first
+    let latest = await AcademicScore.findOne({ date: today }).lean();
+
+    // If today's data not found, fallback to the latest available
+    if (!latest) {
+      latest = await AcademicScore.findOne().sort({ date: -1 }).lean();
+    }
 
     if (!latest || !Array.isArray(latest.scores)) {
       return res.status(404).json({ message: "No academic data found" });
     }
 
     // Find this student's score inside the scores array
-    // Make sure to compare ObjectId strings for safety
-    const studentScore = latest.scores.find(score => {
-      // score.studentId might be ObjectId or string, convert both to string for comparison
-      return String(score.studentId) === String(student._id);
-    });
+    const studentScore = latest.scores.find(score => String(score.studentId) === String(student._id));
 
     if (!studentScore) {
       return res.status(404).json({ message: "No score found for this student" });
@@ -130,6 +132,49 @@ router.get("/student/:studentId/dashboard", async (req, res) => {
     res.status(500).json({ message: "Error fetching student score" });
   }
 });
+
+// Get latest academic risk scores for all students
+router.get("/students/latest-risk-scores", async (req, res) => {
+  try {
+    // Get today's date string in YYYY-MM-DD format
+    const today = new Date().toISOString().slice(0, 10);
+
+    // Try to find AcademicScore document for today first
+    let latest = await AcademicScore.findOne({ date: today }).lean();
+
+    // If today's data not found, fallback to the latest available
+    if (!latest) {
+      latest = await AcademicScore.findOne().sort({ date: -1 }).lean();
+    }
+
+    if (!latest || !Array.isArray(latest.scores)) {
+      return res.status(404).json({ message: "No academic data found" });
+    }
+
+    // Fetch all students
+    const students = await Student.find({}, "name _id").lean();
+
+    // Map student IDs to names
+    const studentIdToName = {};
+    students.forEach(student => {
+      studentIdToName[student._id.toString()] = student.name;
+    });
+
+    // Prepare the response data
+    const riskScores = latest.scores.map(score => ({
+      studentId: score.studentId,
+      name: studentIdToName[score.studentId.toString()] || "Unknown",
+      riskScore: score.riskScore,
+    }));
+
+    res.json(riskScores);
+  } catch (err) {
+    console.error("Error fetching latest academic risk scores:", err);
+    res.status(500).json({ message: "Error fetching academic risk scores" });
+  }
+});
+
+
 
 
 

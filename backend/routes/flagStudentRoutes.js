@@ -33,26 +33,27 @@ router.get("/:date", async (req, res) => {
   }
 });
 // Get total flag score and comments for a student
-router.get("/student/:studentId/flag-score", async (req, res) => {
-  const { studentId } = req.params;
+// Get total flag score and comments for a student
+router.get("/student/:studentName/flag-score", async (req, res) => {
+  const { studentName } = req.params;
 
   try {
     const records = await FlagStudent.find({
-      "flaggedStudents.studentId": studentId,
-    });
+      "flaggedStudents.name": studentName,
+    }).sort({ date: -1 });
 
     let riskScore = 0;
     let comments = [];
 
     for (let record of records) {
       const studentFlags = record.flaggedStudents.filter(
-        (s) => s.studentId === studentId
+        (s) => s.name === studentName
       );
 
       riskScore += studentFlags.length * 5;
       comments.push(...studentFlags.map((s) => ({
         date: record.date,
-        message: s.message
+        message: s.message,
       })));
     }
 

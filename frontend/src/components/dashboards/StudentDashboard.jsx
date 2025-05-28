@@ -16,7 +16,15 @@ const StudentDashboard = () => {
     // Academic Score
     axios
       .get(`http://localhost:5000/api/academic-score/student/${actualStudentId}/dashboard`)
-      .then((res) => setAcademicData(res.data))
+      .then((res) => {
+        setAcademicData(res.data);
+
+        // Flag Risk Score using student name
+        axios
+          .get(`http://localhost:5000/api/flag-students/student/${res.data.name}/flag-score`)
+          .then((flagRes) => setFlagData(flagRes.data))
+          .catch((err) => console.error("Failed to fetch flag risk data:", err));
+      })
       .catch((err) => {
         setError(err.response?.data?.message || "Failed to fetch academic score.");
       });
@@ -26,12 +34,6 @@ const StudentDashboard = () => {
       .get(`http://localhost:5000/api/attendance/student/${actualStudentId}/risk-score`)
       .then((res) => setAttendanceData(res.data))
       .catch((err) => console.error("Failed to fetch attendance data:", err));
-
-    // Flag Risk Score
-    axios
-      .get(`http://localhost:5000/api/flag-students/student/${actualStudentId}/flag-score`)
-      .then((res) => setFlagData(res.data))
-      .catch((err) => console.error("Failed to fetch flag risk data:", err));
   }, [actualStudentId]);
 
   if (error) return <div><h2>{error}</h2></div>;
@@ -42,7 +44,7 @@ const StudentDashboard = () => {
       <h2>Welcome, {academicData.name}</h2>
 
       {/* Academic Risk Section */}
-      <h3>Academic Risk Score for {academicData.date}: {academicData.riskScore}</h3>
+      <h3>Academic Risk Score: {academicData.riskScore}</h3>
       <p>Drop in Marks: {academicData.details.dropMarks ? "Yes" : "No"}</p>
       <p>No Assignment: {academicData.details.noAssignment ? "Yes" : "No"}</p>
       <p>No Participation: {academicData.details.noParticipation ? "Yes" : "No"}</p>
