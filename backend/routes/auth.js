@@ -105,5 +105,33 @@ router.post('/message/:studentId', async (req, res) => {
   }
 });
 
+router.put('/:studentId/total-risk', async (req, res) => {
+  const { studentId } = req.params;
+  let { totalRiskScore } = req.body;
+
+  totalRiskScore = Number(totalRiskScore); // Convert string → number
+
+  if (isNaN(totalRiskScore)) {
+    return res.status(400).json({ message: 'totalRiskScore must be a valid number' });
+  }
+
+  try {
+    const updatedStudent = await Student.findOneAndUpdate(
+      { studentId },
+      { totalRiskScore },
+      { new: true }
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.json({ message: 'Total risk score updated', student: updatedStudent });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update total risk score' });
+  }
+});
+
+
 
 export default router;

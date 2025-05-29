@@ -34,12 +34,14 @@ router.get("/:date", async (req, res) => {
 });
 // Get total flag score and comments for a student
 // Get total flag score and comments for a student
+
 router.get("/student/:studentName/flag-score", async (req, res) => {
   const { studentName } = req.params;
+  const normalizedName = studentName.trim().toLowerCase();
 
   try {
     const records = await FlagStudent.find({
-      "flaggedStudents.name": studentName,
+      "flaggedStudents.name": { $regex: new RegExp(`^${normalizedName}$`, 'i') }
     }).sort({ date: -1 });
 
     let riskScore = 0;
@@ -47,10 +49,11 @@ router.get("/student/:studentName/flag-score", async (req, res) => {
 
     for (let record of records) {
       const studentFlags = record.flaggedStudents.filter(
-        (s) => s.name === studentName
+        (s) => s.name.trim().toLowerCase() === normalizedName
       );
 
       riskScore += studentFlags.length * 5;
+
       comments.push(...studentFlags.map((s) => ({
         date: record.date,
         message: s.message,
@@ -66,6 +69,5 @@ router.get("/student/:studentName/flag-score", async (req, res) => {
     res.status(500).json({ flagRiskScore: 0, comments: [] });
   }
 });
-
 
 export default router;
