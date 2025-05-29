@@ -1,15 +1,15 @@
-// models/FlagStudent.js
+
 import mongoose from "mongoose";
 
 const FlagStudentSchema = new mongoose.Schema({
   date: {
     type: String,
     required: true,
-    unique: true, // one submission per day
+    unique: true, 
   },
   flaggedStudents: [
     {
-      studentId: String, // NEW FIELD
+      studentId: String, 
       name: String,
       message: String,
     },

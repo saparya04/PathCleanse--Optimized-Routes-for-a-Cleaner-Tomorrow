@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import FlagStudent from "../models/FlagStudent.js";
-// Submit flagged students
+
 router.post("/", async (req, res) => {
   const { date, flaggedStudents } = req.body;
 
@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Check if flags already submitted for the day
+
 router.get("/:date", async (req, res) => {
   const { date } = req.params;
   try {
@@ -32,8 +32,6 @@ router.get("/:date", async (req, res) => {
     res.status(500).json({ submitted: false });
   }
 });
-// Get total flag score and comments for a student
-// Get total flag score and comments for a student
 
 router.get("/student/:studentName/flag-score", async (req, res) => {
   const { studentName } = req.params;

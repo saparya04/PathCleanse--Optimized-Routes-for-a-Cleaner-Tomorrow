@@ -13,6 +13,7 @@ import DynamicParentDashboard from './components/dashboards/DynamicParentDashboa
 import StudentDashboard from './components/dashboards/StudentDashboard';
 import RiskList from './components/dashboards/RiskList';
 import CommunicateWithTeachers from './components/dashboards/CommunicateWithTeachers';
+import MeetParents from './components/dashboards/MeetParents';
 function App() {
   return (
     <Router>
@@ -29,7 +30,8 @@ function App() {
 <Route path="/student-dashboard/:studentId" element={<StudentDashboard />} />
          <Route path="/communicate/:studentId" element={<CommunicateWithTeachers />} />
          <Route path="/risk-list" element={<RiskList />} />
-        <Route path="/flag-students" element={<FlagStudentsPage />} />
+        <Route path="/meet-parents" element={<MeetParents />} />
+         <Route path="/flag-students" element={<FlagStudentsPage />} />
       </Routes> 
     </Router>
   );

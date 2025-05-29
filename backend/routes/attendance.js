@@ -32,24 +32,23 @@ router.get("/:date", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
-// Add this route at the end of routes/attendance.js
+
 router.get("/student/:studentId/risk-score", async (req, res) => {
   const { studentId } = req.params;
 
   try {
-    // Fetch student by ID
+    
     const student = await Student.findById(studentId);
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    // Normalize student name for matching
+   
     const fullName = student.name.trim().toLowerCase();
 
-    // Find latest attendance date in the collection
     const latestAttendance = await Attendance.findOne().sort({ date: -1 }).lean();
     if (!latestAttendance) {
-      // No attendance data at all
+     
       return res.status(200).json({
         attendancePercentage: 0,
         riskScore: 0,
@@ -58,14 +57,14 @@ router.get("/student/:studentId/risk-score", async (req, res) => {
     }
     const latestDate = latestAttendance.date;
 
-    // Fetch all attendance records up to and including latestDate
+   
     const attendanceRecords = await Attendance.find({ date: { $lte: latestDate } }).lean();
 
     let totalDays = 0;
     let presentDays = 0;
 
     attendanceRecords.forEach(record => {
-      // Normalize record keys (student names) to lower case
+     
       const studentStatusMap = record.records instanceof Map
         ? Object.fromEntries(record.records)
         : record.records;

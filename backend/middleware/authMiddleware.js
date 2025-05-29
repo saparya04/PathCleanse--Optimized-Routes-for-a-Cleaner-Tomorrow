@@ -17,7 +17,7 @@ export default function SignupForm() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`http://localhost:5000/api/auth/signup/${role}`, form);
+      const res = await axios.post(`http:localhost:5000/api/auth/signup/${role}`, form);
 
       alert(`${role} signup successful! Please login.`);
       navigate(`/login/${role}`);
@@ -25,7 +25,7 @@ export default function SignupForm() {
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error === 'No such student') {
         alert('No such student');
-        navigate('/signup/parent');  // Redirect back to parent signup page
+        navigate('/signup/parent');   
       } else {
         alert(err.response?.data?.error || 'Signup failed');
       }

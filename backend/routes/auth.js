@@ -1,4 +1,4 @@
-// routes/auth.js
+
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -13,7 +13,7 @@ const router = express.Router();
 
 const models = { teacher: Teacher, admin: Admin, parent: Parent };
 
-// ✅ Signup Route
+
 router.post('/signup/:role', async (req, res) => {
   const { role } = req.params;
   const data = req.body;
@@ -41,7 +41,7 @@ router.post('/signup/:role', async (req, res) => {
   }
 }
 
-  // Default signup for teacher/admin
+
   try {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     data.password = hashedPassword;
@@ -53,7 +53,7 @@ router.post('/signup/:role', async (req, res) => {
   }
 });
 
-// ✅ Login Route
+
 router.post('/login/:role', async (req, res) => {
   const { role } = req.params;
   const { teacherId, studentId, password } = req.body;
@@ -87,7 +87,7 @@ router.post('/login/:role', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Save parent message for a student
+
 router.post('/message/:studentId', async (req, res) => {
   const { studentId } = req.params;
   const { content } = req.body;
@@ -109,7 +109,7 @@ router.put('/:studentId/total-risk', async (req, res) => {
   const { studentId } = req.params;
   let { totalRiskScore } = req.body;
 
-  totalRiskScore = Number(totalRiskScore); // Convert string → number
+  totalRiskScore = Number(totalRiskScore); 
 
   if (isNaN(totalRiskScore)) {
     return res.status(400).json({ message: 'totalRiskScore must be a valid number' });
@@ -129,6 +129,15 @@ router.put('/:studentId/total-risk', async (req, res) => {
     res.json({ message: 'Total risk score updated', student: updatedStudent });
   } catch (err) {
     res.status(500).json({ error: 'Failed to update total risk score' });
+  }
+});
+
+router.get('/students', async (req, res) => {
+  try {
+    const students = await Student.find({});
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch students' });
   }
 });
 

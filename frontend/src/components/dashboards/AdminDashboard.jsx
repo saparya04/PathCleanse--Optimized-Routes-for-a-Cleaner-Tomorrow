@@ -8,10 +8,13 @@ export default function AdminDashboard() {
   const handleActionChange = (e) => {
     const action = e.target.value;
     setSelectedAction(action);
+
     if (action === "riskList") {
       navigate("/risk-list");
+    } else if (action === "contactParents") {
+      navigate("/meet-parents"); // ✅ New route for "Meet Parents"
     }
-    // Handle other actions as needed
+    // Add more actions as needed
   };
 
   return (

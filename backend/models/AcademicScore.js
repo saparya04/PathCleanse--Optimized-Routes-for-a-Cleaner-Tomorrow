@@ -6,7 +6,7 @@ const studentScoreSchema = new mongoose.Schema({
   noAssignment: Boolean,
   noParticipation: Boolean,
   normal: Boolean,
-  riskScore: Number, // ✅ Add this line
+  riskScore: Number, 
 });
 
 
