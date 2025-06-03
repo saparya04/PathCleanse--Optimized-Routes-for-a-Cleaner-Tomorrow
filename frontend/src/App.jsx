@@ -14,6 +14,8 @@ import StudentDashboard from './components/dashboards/StudentDashboard';
 import RiskList from './components/dashboards/RiskList';
 import CommunicateWithTeachers from './components/dashboards/CommunicateWithTeachers';
 import MeetParents from './components/dashboards/MeetParents';
+
+
 function App() {
   return (
     <Router>
@@ -27,13 +29,14 @@ function App() {
          <Route path="/:studentId/dashboard" element={<DynamicParentDashboard />} />
         <Route path="/attendance" element={<AttendancePage />} />
         <Route path="/academic-score" element={<AcademicScorePage />} />
-<Route path="/student-dashboard/:studentId" element={<StudentDashboard />} />
+        <Route path="/student-dashboard/:studentId" element={<StudentDashboard />} />
          <Route path="/communicate/:studentId" element={<CommunicateWithTeachers />} />
          <Route path="/risk-list" element={<RiskList />} />
         <Route path="/meet-parents" element={<MeetParents />} />
          <Route path="/flag-students" element={<FlagStudentsPage />} />
       </Routes> 
     </Router>
+    
   );
 }
 
