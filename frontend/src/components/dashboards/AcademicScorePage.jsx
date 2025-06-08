@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BackgroundLines } from "../BackgroundLines.jsx";
 
 const studentNames = [
   "acelin nazareth", "aditya rathod", "aishwarya sreejith", "anushka patil",
@@ -136,56 +137,65 @@ console.log(payload);
   }
 
   return (
-    <div>
-      <h2>Academic Score Evaluation</h2>
-      <table border="1" cellPadding="8">
+  <div className="relative w-full min-h-screen">
+    {/* Background lines */}
+    <div className="absolute top-0 left-0 w-full h-full -z-10">
+      {/* If you want the same background lines */}
+      <BackgroundLines />
+    </div>
+
+    {/* Foreground content */}
+    <div className="relative z-10 p-6 text-white">
+      <h2 className="text-2xl font-semibold mb-4">Academic Score Evaluation</h2>
+
+      <table
+        border="1"
+        cellPadding="8"
+        className="w-full bg-black text-white border border-black shadow-md rounded-md"
+      >
         <thead>
           <tr>
-            <th>Student</th>
-            <th>Drop in Marks</th>
-            <th>No Assignment</th>
-            <th>No Participation</th>
-            <th>Normal</th>
+            <th className="text-center">Student</th>
+            <th className="text-center">Drop in Marks</th>
+            <th className="text-center">No Assignment</th>
+            <th className="text-center">No Participation</th>
+            <th className="text-center">Normal</th>
           </tr>
         </thead>
         <tbody>
           {studentNames.map((name) => (
             <tr key={name}>
-              <td>{name}</td>
-              <td>
+              <td className="text-center">{name}</td>
+              <td className="text-center">
                 <input
                   type="checkbox"
                   checked={scores[name]?.dropMarks || false}
                   onChange={() => handleChange(name, "dropMarks")}
-                  disabled={scores[name]?.normal}
+                  disabled={submitted}
                 />
               </td>
-              <td>
+              <td className="text-center">
                 <input
                   type="checkbox"
                   checked={scores[name]?.noAssignment || false}
                   onChange={() => handleChange(name, "noAssignment")}
-                  disabled={scores[name]?.normal}
+                  disabled={submitted}
                 />
               </td>
-              <td>
+              <td className="text-center">
                 <input
                   type="checkbox"
                   checked={scores[name]?.noParticipation || false}
                   onChange={() => handleChange(name, "noParticipation")}
-                  disabled={scores[name]?.normal}
+                  disabled={submitted}
                 />
               </td>
-              <td>
+              <td className="text-center">
                 <input
                   type="checkbox"
                   checked={scores[name]?.normal || false}
                   onChange={() => handleChange(name, "normal")}
-                  disabled={
-                    scores[name]?.dropMarks ||
-                    scores[name]?.noAssignment ||
-                    scores[name]?.noParticipation
-                  }
+                  disabled={submitted}
                 />
               </td>
             </tr>
@@ -193,13 +203,34 @@ console.log(payload);
         </tbody>
       </table>
 
-      <br />
-      <button onClick={handleSubmitAll} disabled={submitted}>
-        Submit
-      </button>{" "}
-      <button onClick={goToMainMenu}>Go to Main Menu</button>
+      {/* Submit Button */}
+      <button
+        onClick={handleSubmitAll}
+        disabled={submitted}
+        style={{
+          marginTop: "20px",
+          backgroundColor: submitted ? "#ccc" : "#4caf50",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+          padding: "10px 20px",
+          fontSize: "18px"
+        }}
+      >
+        Submit Scores
+      </button>
+
+      <br /><br />
+      <button
+        onClick={goToMainMenu}
+        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded block mx-auto"
+      >
+        Go to Main Menu
+      </button>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default AcademicScorePage;

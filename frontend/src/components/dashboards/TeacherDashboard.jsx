@@ -44,6 +44,7 @@ export default function TeacherDashboard() {
 
   return (
     <div className="relative min-h-screen text-white">
+      
       {/* Hero Section */}
       <div className="py-10 px-4 bg-gradient-to-b from-black to-gray-800">
         <LampContainer>
@@ -61,11 +62,11 @@ export default function TeacherDashboard() {
           </motion.h1>
 
 
-         
+
           <div className="flex flex-col items-center justify-center py-12 px-6">
-            <h2>Teacher Dashboard</h2>
+            
             <form>
-              <label style={{ color: attendanceDone ? "gray" : "black" }}>
+              <label style={{ color: attendanceDone ? "gray" : "white" }}>
                 <input
                   type="radio"
                   name="teacherAction"
@@ -76,7 +77,7 @@ export default function TeacherDashboard() {
                 Mark Attendance {attendanceDone && "(Already submitted today)"}
               </label>
               <br />
-              <label style={{ color: scoreSubmitted ? "gray" : "black" }}>
+              <label style={{ color: scoreSubmitted ? "gray" : "white" }}>
                 <input
                   type="radio"
                   name="teacherAction"
@@ -87,7 +88,7 @@ export default function TeacherDashboard() {
                 Academic Score {scoreSubmitted && "(Already submitted today)"}
               </label>
               <br />
-              <label className="text-black">
+              <label className="text-white">
                 <input
                   type="radio"
                   name="teacherAction"
