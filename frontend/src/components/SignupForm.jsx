@@ -1,57 +1,7 @@
-// import { useParams, useNavigate } from 'react-router-dom';
-// import { useState } from 'react';
-// import axios from 'axios';
-
-// export default function SignupForm() {
-//   const { role } = useParams();
-//   const [form, setForm] = useState({});
-//   const navigate = useNavigate();
-
-//   const fields = {
-//     admin: ['name', 'teacherId', 'password'],
-//     teacher: ['name', 'subject', 'teacherId', 'password'],
-//     parent: ['name', 'studentId', 'address', 'phone', 'password'],
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       const res = await axios.post(`http://localhost:5000/api/auth/signup/${role}`, form);
-
-//       alert(`${role} signup successful! Please login.`);
-//       navigate(`/login/${role}`);
-
-//     } catch (err) {
-//       if (err.response && err.response.data && err.response.data.error === 'No such student') {
-//         alert('No such student');
-//         navigate('/signup/parent');  // Redirect back to parent signup page
-//       } else {
-//         alert(err.response?.data?.error || 'Signup failed');
-//       }
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <h2>{role.toUpperCase()} Sign Up</h2>
-//       {fields[role].map((f) => (
-//         <input
-//           key={f}
-//           placeholder={f}
-//           onChange={(e) => setForm({ ...form, [f]: e.target.value })}
-//           required
-//         />
-//       ))}
-//       <button type="submit">Sign Up</button>
-//     </form>
-//   );
-// }
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { BackgroundLines } from "./BackgroundLines";
 // Utility function cn for joining class names
 function cn(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -192,7 +142,14 @@ export default function SignupForm() {
   }
 
   return (
-    <Card className="max-w-md mx-auto mt-10">
+    <div>
+      <div className="pointer-events-none absolute inset-0">
+        <BackgroundLines />
+      </div>
+
+      <div className="relative pointer-events-auto flex items-center justify-center min-h-screen px-4">
+        <Card className="max-w-md w-full mx-auto mt-10 bg-gray-900 text-white border-gray-700">
+
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle>{role.toUpperCase()} Sign Up</CardTitle>
@@ -206,6 +163,7 @@ export default function SignupForm() {
               onChange={(e) => setForm({ ...form, [f]: e.target.value })}
               required
               className="w-full mb-4 p-2 border rounded"
+
               type={f === "password" ? "password" : "text"}
             />
           ))}
@@ -214,12 +172,18 @@ export default function SignupForm() {
         <CardFooter>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="bg-blue-600 text-black px-4 py-2 rounded hover:bg-white transition"
           >
             Sign Up
           </button>
         </CardFooter>
       </form>
     </Card>
+
+      </div>
+    </div>
+    
+    
+     
   );
 }

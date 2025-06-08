@@ -22,6 +22,7 @@ import {
 import { FaGithub, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 import { FloatingDock } from '../components/FloatingDock.jsx';
+import { FocusCards, cards } from './FocusCards.jsx';
 
 
 export default function RoleSelection() {
@@ -59,6 +60,9 @@ export default function RoleSelection() {
     },
   ];
 
+
+
+
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
       <Navbar>
@@ -77,15 +81,15 @@ export default function RoleSelection() {
 
 
       {/* <div className="mt-10">
-        <TypewriterEffect
-          words={[
-            { text: "Parent", className: "" },
-            { text: "Teacher Connection", className: "" }
-          ]}
-          className="mb-6"
-          cursorClassName="bg-white-500"
-        />
-      </div> */}
+          <TypewriterEffect
+            words={[
+              { text: "Parent", className: "" },
+              { text: "Teacher Connection", className: "" }
+            ]}
+            className="mb-6"
+            cursorClassName="bg-white-500"
+          />
+        </div> */}
 
       {/* Spotlight Div */}
       <div className="relative flex h-[40rem] w-full overflow-hidden rounded-md bg-black/[0.96] antialiased md:items-center md:justify-center">
@@ -143,14 +147,20 @@ export default function RoleSelection() {
 
         </div>
 
+        {/* Cards logic */}
+        <div className="py-20 px-6 md:px-10">
+          <FocusCards cards={cards} />
+        </div>
+
+
         {/* Main  Logic  */}
-        <div className="mt-10 z-10 relative flex flex-row justify-center items-center space-x-4 mb-8">
+        <div className="mt-10 z-10 relative flex flex-row justify-center items-center gap-60 mb-8">
 
           {['admin', 'teacher', 'parent'].map((role) => (
             <button
               key={role}
               onClick={() => navigate(`/signup/${role}`)}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="px-6 py-2 bg-gray-600 text-white rounded hover:bg-white hover:text-black transition"
             >
               {role.toUpperCase()}
             </button>
@@ -163,6 +173,8 @@ export default function RoleSelection() {
 
 
       </div>
+
+
       {/* Footer */}
       <div className="mt-10 max-w-4xl mx-auto w-full px-4">
         <div className="flex justify-center">
